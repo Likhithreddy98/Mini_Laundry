@@ -44,6 +44,7 @@ const createOrder = async (req, res) => {
     const orderId = `ORD-${Date.now()}-${uuidv4().slice(0, 6).toUpperCase()}`;
 
     const order = await Order.create({
+      user: req.user._id,
       orderId,
       customerName,
       phone,
@@ -65,7 +66,7 @@ const getOrders = async (req, res) => {
   try {
     const { status, search, garmentType } = req.query;
 
-    const filter = {};
+    const filter = { user: req.user._id };
 
     if (status) {
       filter.status = status.toUpperCase();
@@ -92,14 +93,18 @@ const getOrders = async (req, res) => {
 
 const getDashboard = async (req, res) => {
   try {
-    const totalOrders = await Order.countDocuments();
+    const userFilter = { user: req.user._id };
+
+    const totalOrders = await Order.countDocuments(userFilter);
 
     const revenueResult = await Order.aggregate([
+      { $match: { user: req.user._id } },
       { $group: { _id: null, totalRevenue: { $sum: "$totalBill" } } },
     ]);
     const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
 
     const statusCounts = await Order.aggregate([
+      { $match: { user: req.user._id } },
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
 
@@ -121,7 +126,7 @@ const getDashboard = async (req, res) => {
 
 const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findOne({ orderId: req.params.id });
+    const order = await Order.findOne({ orderId: req.params.id, user: req.user._id });
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
@@ -143,7 +148,7 @@ const updateOrderStatus = async (req, res) => {
     }
 
     const order = await Order.findOneAndUpdate(
-      { orderId: req.params.id },
+      { orderId: req.params.id, user: req.user._id },
       { status: status.toUpperCase() },
       { new: true }
     );

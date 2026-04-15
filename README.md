@@ -94,6 +94,7 @@ Building this efficiently relied heavily on an AI-first workflow.
 > "Design a dark-text, highly clean minimal CSS layout matching modern glassmorphic aesthetics that doesn't rely on Tailwind."
 
 **What AI got wrong:**
+- The AI initially configured an axios interceptor that caught all 401 login errors and forcefully redirected to `/login`. This reloaded the page and cleared the user's form data before error toasts could even render.
 - The AI initially attempted to scaffold a complex TypeScript environment when only basic JavaScript was desired to maximize speed.
 - It wrote generic REST messages (e.g. `Server Error`) that weren't robust enough for frontend client interactions.
 - It attempted to map the backend dashboard route (`/dashboard`) underneath the catch-all dynamic parameter router (`/:id`), causing all dashboard pings to throw 404 CastErrors.

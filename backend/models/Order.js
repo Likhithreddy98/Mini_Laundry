@@ -5,6 +5,11 @@ const STATUS_VALUES = ["RECEIVED", "PROCESSING", "READY", "DELIVERED"];
 
 const orderSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     orderId: {
       type: String,
       required: true,

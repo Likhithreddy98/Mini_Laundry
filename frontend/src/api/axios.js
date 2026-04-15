@@ -18,7 +18,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isAuthRoute = error.config?.url?.includes("/auth/");
+    if (error.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem("laundry_token");
       localStorage.removeItem("laundry_user");
       window.location.href = "/login";

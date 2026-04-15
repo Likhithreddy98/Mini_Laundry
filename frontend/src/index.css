@@ -255,6 +255,37 @@ body {
 .error-text { font-size: .78rem; color: var(--danger); margin-top: .1rem; }
 .required { color: var(--danger); }
 
+/* ── Password toggle ── */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 3.5rem;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: .65rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: .75rem;
+  font-weight: 600;
+  padding: .2rem .35rem;
+  color: var(--primary);
+  letter-spacing: .02em;
+  user-select: none;
+  transition: opacity .15s;
+}
+
+.eye-toggle:hover {
+  opacity: .7;
+}
+
 /* ── Cards & sections ── */
 .section-card {
   background: var(--white);
